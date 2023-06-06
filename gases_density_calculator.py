@@ -44,17 +44,19 @@ st.title("Gas Mixture Density Calculator")
 gas_mixture = {}
 total_percentage = 0
 
-while total_percentage != 100:
-    gas_id = str(len(gas_mixture))  # Generate a unique ID for the gas selection
-    gas = st.text_input(f"Gas {gas_id} Name", key=f"gas_{gas_id}_name")
-    percentage = st.number_input(f"Percentage for Gas {gas_id}", min_value=0, max_value=100, step=1, key=f"gas_{gas_id}_percentage")
-    total_percentage += percentage
+while total_percentage < 100:
+    remaining_percentage = 100 - total_percentage
+    st.write(f"Remaining Percentage: {remaining_percentage}%")
 
-    if total_percentage > 100:
-        st.error("Total percentage should not exceed 100%. Please adjust the percentages.")
-        total_percentage -= percentage
-    elif gas:
-        gas_mixture[gas] = percentage
+    selected_gas = st.selectbox("Select Gas", list(gas_molar_masses.keys()))
+    percentage = st.number_input("Percentage", min_value=0, max_value=remaining_percentage, step=1)
+
+    if selected_gas in gas_mixture:
+        st.warning("Gas already selected. Please choose a different gas.")
+        continue
+
+    gas_mixture[selected_gas] = percentage
+    total_percentage += percentage
 
 pressure = st.slider("Pressure (PSI)", 0, 200, step=1)
 temperature = st.slider("Temperature (°C)", 0, 80, step=1)
