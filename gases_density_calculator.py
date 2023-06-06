@@ -23,6 +23,9 @@ molar_volume_conversion = 1000  # L/m^3
 # Function to calculate density
 def calculate_density(gas_mixture, pressure, temperature):
     total_percentage = sum(gas_mixture.values())
+    if total_percentage != 100:
+        st.error("Gas mixture percentages must add up to 100%.")
+        return None
     density = 0
     for gas, percentage in gas_mixture.items():
         molar_mass = gas_molar_masses[gas]
@@ -48,39 +51,41 @@ pressure = st.slider("Pressure (PSI)", 0, 200, step=1)
 temperature = st.slider("Temperature (°C)", 0, 80, step=1)
 
 density = calculate_density(gas_mixture, pressure, temperature)
-st.write("Density of Gas Mixture:", density, "kg/m^3")
 
-# Generate pressure and temperature values for the 3D plot
-pressure_values = np.linspace(0, 200, 100)
-temperature_values = np.linspace(0, 80, 100)
+if density is not None:
+    st.write("Density of Gas Mixture:", density, "kg/m^3")
 
-# Calculate density for each pressure and temperature combination
-density_values = np.zeros((100, 100))
-for i, pressure_val in enumerate(pressure_values):
-    for j, temperature_val in enumerate(temperature_values):
-        density_values[i, j] = calculate_density(gas_mixture, pressure_val, temperature_val)
+    # Generate pressure and temperature values for the 3D plot
+    pressure_values = np.linspace(0, 200, 100)
+    temperature_values = np.linspace(0, 80, 100)
 
-# Create a meshgrid for the pressure and temperature values
-pressure_grid, temperature_grid = np.meshgrid(pressure_values, temperature_values)
+    # Calculate density for each pressure and temperature combination
+    density_values = np.zeros((100, 100))
+    for i, pressure_val in enumerate(pressure_values):
+        for j, temperature_val in enumerate(temperature_values):
+            density_values[i, j] = calculate_density(gas_mixture, pressure_val, temperature_val)
 
-# Create a 3D plot of density
-fig = plt.figure()
-ax = fig.add_subplot(111, projection="3d")
-ax.plot_surface(pressure_grid, temperature_grid, density_values, cmap="viridis")
-ax.set_xlabel("Pressure (PSI)")
-ax.set_ylabel("Temperature (°C)")
-ax.set_zlabel("Density (kg/m^3)")
+    # Create a meshgrid for the pressure and temperature values
+    pressure_grid, temperature_grid = np.meshgrid(pressure_values, temperature_values)
 
-# Set the title of the graph based on the gas mixture
-gas_mixture_title = ", ".join([f"{gas} ({percentage}%)" for gas, percentage in gas_mixture.items()])
-ax.set_title(f"Gas Mixture Density: {gas_mixture_title}")
+    # Create a 3D plot of density
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection="3d")
+    ax.plot_surface(pressure_grid, temperature_grid, density_values, cmap="viridis")
+    ax.set_xlabel("Pressure (PSI)")
+    ax.set_ylabel("Temperature (°C)")
+    ax.set_zlabel("Density (kg/m^3)")
 
-# Add a red dot for the calculated density position
-ax.scatter(pressure, temperature, density, color="red", s=50)
+    # Set the title of the graph based on the gas mixture
+    gas_mixture_title = ", ".join([f"{gas} ({percentage}%)" for gas, percentage in gas_mixture.items()])
+    ax.set_title(f"Gas Mixture Density: {gas_mixture_title}")
 
-# Adjust the z-axis scale for better visualization
-max_density = np.max(density_values)
-ax.set_zlim(0, max_density + max_density * 0.1)
+    # Add a red dot for the calculated density position
+    ax.scatter(pressure, temperature, density, color="red", s=50)
 
-# Display the plot using st.pyplot
-st.pyplot(fig)
+    # Adjust the z-axis scale for better visualization
+    max_density = np.max(density_values)
+    ax.set_zlim(0, max_density + max_density * 0.1)
+
+    # Display the plot using st.pyplot
+    st.pyplot(fig)
