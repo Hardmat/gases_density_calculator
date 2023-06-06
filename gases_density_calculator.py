@@ -84,10 +84,17 @@ ax.plot_surface(pressure_grid, temperature_grid, density_values, cmap="viridis")
 ax.set_xlabel("Pressure (PSI)")
 ax.set_ylabel("Temperature (°C)")
 ax.set_zlabel("Density (kg/m^3)")
-ax.set_title("Gas Mixture Density")
+
+# Set the title of the graph based on the gas mixture
+gas_mixture_title = ", ".join([f"{gas} ({percentage}%)" for gas, percentage in gas_mixture.items()])
+ax.set_title(f"Gas Mixture Density: {gas_mixture_title}")
 
 # Add a red dot for the calculated density position
 ax.scatter(pressure, temperature, density, color="red", s=50)
+
+# Adjust the z-axis scale for better visualization
+max_density = np.max(density_values)
+ax.set_zlim(0, max_density + max_density * 0.1)
 
 # Display the plot using st.pyplot
 st.pyplot(fig)
