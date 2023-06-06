@@ -58,6 +58,9 @@ while total_percentage < 100:
     gas_mixture[selected_gas] = percentage
     total_percentage += percentage
 
+    if total_percentage == 100:
+        break
+
 pressure = st.slider("Pressure (PSI)", 0, 200, step=1)
 temperature = st.slider("Temperature (°C)", 0, 80, step=1)
 
