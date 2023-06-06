@@ -26,13 +26,12 @@ def calculate_density(pressure, temperature, gas_mixture):
 
     for gas, percentage in gas_mixture.items():
         molar_mass = gas_molar_masses[gas]
-        n = (percentage / 100) / molar_mass  # number of moles
-        molar_volume = (n * ideal_gas_constant * temperature) / pressure  # ideal gas law equation
+        molar_volume = (percentage / 100) * (molar_mass / ideal_gas_constant) * (temperature + 273.15) / pressure
         total_molar_mass += molar_mass
         total_molar_volume += molar_volume
 
-    density = (total_molar_mass * pressure) / (total_molar_volume * ideal_gas_constant * temperature)
-    density = density * molar_volume_conversion / 1000  # Convert from g/L to kg/m^3
+    density = (pressure * total_molar_mass) / (total_molar_volume * ideal_gas_constant)
+    density = density * molar_volume_conversion  # Convert from g/L to kg/m^3
     return density
 
 # Streamlit app
@@ -47,29 +46,25 @@ while total_percentage < 100:
     st.write(f"Remaining Percentage: {remaining_percentage}%")
 
     available_gases = [gas for gas in gas_molar_masses.keys() if gas not in gas_mixture]
-    selected_gases = st.multiselect("Select Gases", available_gases)
+    selected_gas = st.selectbox("Select Gas", available_gases)
+    percentage = st.number_input(f"Percentage of {selected_gas}", min_value=0, max_value=remaining_percentage, step=1)
 
-    if not selected_gases:
+    if selected_gas in gas_mixture:
+        st.warning("Gas already selected. Please choose a different gas.")
+        continue
+
+    gas_mixture[selected_gas] = percentage
+    total_percentage += percentage
+
+    if total_percentage == 100:
         break
-
-    for gas in selected_gases:
-        percentage = st.number_input(f"Percentage of {gas}", min_value=0, max_value=remaining_percentage, step=1)
-
-        if gas in gas_mixture:
-            st.warning("Gas already selected. Please choose a different gas.")
-            continue
-
-        gas_mixture[gas] = percentage
-        total_percentage += percentage
-
-        if total_percentage == 100:
-            break
 
 pressure = st.slider("Pressure (PSI)", 0, 200, step=1)
 temperature = st.slider("Temperature (°C)", 0, 80, step=1)
 
 density = calculate_density(pressure, temperature, gas_mixture)
 st.write("Density of Gas Mixture:", density, "kg/m^3")
+
 
 # Generate pressure and temperature values for the 3D plot
 pressure_values = np.linspace(0, 200, 100)
