@@ -46,14 +46,14 @@ total_percentage = 0
 
 while total_percentage != 100:
     gas_id = str(len(gas_mixture))  # Generate a unique ID for the gas selection
-    gas = st.selectbox(f"Select Gas {gas_id}", list(gas_molar_masses.keys()))
-    percentage = st.number_input("Percentage", min_value=0, max_value=100, step=1)
+    gas = st.text_input(f"Gas {gas_id} Name", key=f"gas_{gas_id}_name")
+    percentage = st.number_input(f"Percentage for Gas {gas_id}", min_value=0, max_value=100, step=1, key=f"gas_{gas_id}_percentage")
     total_percentage += percentage
 
     if total_percentage > 100:
         st.error("Total percentage should not exceed 100%. Please adjust the percentages.")
         total_percentage -= percentage
-    else:
+    elif gas:
         gas_mixture[gas] = percentage
 
 pressure = st.slider("Pressure (PSI)", 0, 200, step=1)
