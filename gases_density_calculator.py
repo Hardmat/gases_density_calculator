@@ -20,9 +20,6 @@ gas_molar_masses = {
 
 ideal_gas_constant = 0.0821  # atm * L / (mol * K)
 molar_volume_conversion = 1000  # L/m^3
-lbs_to_kg_conversion = 0.453592  # lbs to kg
-gallon_to_liter_conversion = 3.78541  # gallon to liter
-cubic_foot_to_liter_conversion = 28.3168  # cubic foot to liter
 
 # Function to calculate density
 def calculate_density(gas_mixture, pressure, temperature):
@@ -58,12 +55,7 @@ temperature = st.slider("Temperature (°C)", 0, 80, step=1)
 density = calculate_density(gas_mixture, pressure, temperature)
 
 if density is not None:
-    st.write("Density of Gas Mixture:")
-    st.write(f"- Kilograms per cubic meter: {density:.2f} kg/m^3")
-    st.write(f"- Grams per liter: {density*1000:.2f} g/L")
-    st.write(f"- Kilograms per liter: {density:.2f} kg/L")
-    st.write(f"- Pounds per cubic foot: {density * lbs_to_kg_conversion / cubic_foot_to_liter_conversion:.2f} lb/ft^3")
-    st.write(f"- Pounds per gallon: {density * lbs_to_kg_conversion / gallon_to_liter_conversion:.2f} lb/gal")
+    st.write("Density of Gas Mixture:", density, "kg/m^3")
 
     # Generate pressure and temperature values for the 3D plot
     pressure_values = np.linspace(0, 200, 100)
