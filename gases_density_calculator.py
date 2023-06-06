@@ -34,7 +34,7 @@ def calculate_density(pressure, temperature, gas_mixture):
     pressure_atm = pressure / 14.6959488  # Convert pressure from PSI to atm
 
     density = (pressure_atm * total_molar_mass) / (total_molar_volume * ideal_gas_constant * temperature_kelvin)
-    density = density * molar_volume_conversion  # Convert from g/L to kg/m^3
+    density = density * molar_volume_conversion / 1000  # Convert from g/L to kg/m^3
     return density
 
 # Streamlit app
@@ -73,7 +73,7 @@ temperature = st.slider("Temperature (°C)", 0, 80, step=1)
 density = calculate_density(pressure, temperature, gas_mixture)
 st.write("Density of Gas Mixture:", density, "kg/m^3")
 
-# Generate pressure and temperature values
+# Generate pressure and temperature values for the 3D plot
 pressure_values = np.linspace(0, 200, 100)
 temperature_values = np.linspace(0, 80, 100)
 
