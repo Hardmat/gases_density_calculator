@@ -99,3 +99,21 @@ if density is not None:
 
     # Display the plot using st.plotly_chart
     st.plotly_chart(fig)
+    
+# Find the closest meshgrid point to the user-input values
+pressure_idx = np.argmin(np.abs(pressure_grid - pressure))
+temperature_idx = np.argmin(np.abs(temperature_grid - temperature))
+closest_density = density_values[pressure_idx, temperature_idx]
+
+# Add a marker for the calculated density position
+fig.add_trace(go.Scatter3d(
+    x=[pressure_grid[pressure_idx]],
+    y=[temperature_grid[temperature_idx]],
+    z=[closest_density],
+    mode="markers",
+    marker=dict(
+        size=5,
+        color="red"
+    )
+))
+
