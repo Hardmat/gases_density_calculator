@@ -48,18 +48,24 @@ while total_percentage < 100:
     remaining_percentage = 100 - total_percentage
     st.write(f"Remaining Percentage: {remaining_percentage}%")
 
-    selected_gas = st.selectbox("Select Gas", list(gas_molar_masses.keys()))
-    percentage = st.number_input("Percentage", min_value=0, max_value=remaining_percentage, step=1)
+    available_gases = [gas for gas in gas_molar_masses.keys() if gas not in gas_mixture]
+    selected_gases = st.multiselect("Select Gases", available_gases)
 
-    if selected_gas in gas_mixture:
-        st.warning("Gas already selected. Please choose a different gas.")
-        continue
-
-    gas_mixture[selected_gas] = percentage
-    total_percentage += percentage
-
-    if total_percentage == 100:
+    if not selected_gases:
         break
+
+    for gas in selected_gases:
+        percentage = st.number_input(f"Percentage of {gas}", min_value=0, max_value=remaining_percentage, step=1)
+
+        if gas in gas_mixture:
+            st.warning("Gas already selected. Please choose a different gas.")
+            continue
+
+        gas_mixture[gas] = percentage
+        total_percentage += percentage
+
+        if total_percentage == 100:
+            break
 
 pressure = st.slider("Pressure (PSI)", 0, 200, step=1)
 temperature = st.slider("Temperature (°C)", 0, 80, step=1)
