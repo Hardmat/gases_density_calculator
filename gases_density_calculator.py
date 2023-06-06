@@ -1,6 +1,8 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+import mpld3
+import mpld3.plugins as plugins
 import numpy as np
 
 # Constants
@@ -83,9 +85,12 @@ if density is not None:
     # Add a red dot for the calculated density position
     ax.scatter(pressure, temperature, density, color="red", s=50)
 
-    # Adjust the z-axis scale for better visualization
-    max_density = np.max(density_values)
-    ax.set_zlim(0, max_density + max_density * 0.1)
+    # Enable rotation plugin for the 3D plot
+    plugins.connect(fig, plugins.MousePosition(fontsize=14))
+    plugins.connect(fig, plugins.RotateAxes3d())
 
-    # Display the plot using st.pyplot
-    st.pyplot(fig)
+    # Generate the interactive plot using mpld3
+    interactive_plot = mpld3.fig_to_html(fig)
+
+    # Display the interactive plot
+    st.write(interactive_plot, unsafe_allow_html=True)
