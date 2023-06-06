@@ -42,6 +42,10 @@ def calculate_density(gas_mixture, pressure, temperature):
 # Streamlit app
 st.title("Gaseous Density Calculator")
 
+# Warning message
+st.warning("Disclaimer: This calculator is based on the ideal gas law and is a work in progress. Use it at your own risk.")
+
+
 gas_mixture = {}
 selected_gases = st.multiselect("Select Gases", list(gas_molar_masses.keys()))
 for gas in selected_gases:
