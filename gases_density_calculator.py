@@ -26,14 +26,12 @@ def calculate_density(pressure, temperature, gas_mixture):
 
     for gas, percentage in gas_mixture.items():
         molar_mass = gas_molar_masses[gas]
-        molar_volume = (percentage / 100) / (molar_mass / ideal_gas_constant)
+        n = (percentage / 100) / molar_mass  # number of moles
+        molar_volume = (n * ideal_gas_constant * temperature) / pressure  # ideal gas law equation
         total_molar_mass += molar_mass
         total_molar_volume += molar_volume
 
-    temperature_kelvin = temperature + 273.15  # Convert temperature to Kelvin
-    pressure_atm = pressure / 14.6959488  # Convert pressure from PSI to atm
-
-    density = (pressure_atm * total_molar_mass) / (total_molar_volume * ideal_gas_constant * temperature_kelvin)
+    density = (total_molar_mass * pressure) / (total_molar_volume * ideal_gas_constant * temperature)
     density = density * molar_volume_conversion / 1000  # Convert from g/L to kg/m^3
     return density
 
