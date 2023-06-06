@@ -67,40 +67,4 @@ if density is not None:
             density_values[i, j] = calculate_density(gas_mixture, pressure_val, temperature_val)
 
     # Create a meshgrid for the pressure and temperature values
-    pressure_grid, temperature_grid = np.meshgrid(pressure_values, temperature_values)
-
-    # Create a 3D plot of density using Plotly
-    fig = go.Figure(data=[go.Surface(z=density_values, x=pressure_grid, y=temperature_grid)])
-    fig.update_layout(
-        scene=dict(
-            xaxis_title="Pressure (PSI)",
-            yaxis_title="Temperature (°C)",
-            zaxis_title="Density (kg/m^3)",
-            camera=dict(
-                eye=dict(x=1.7, y=-1.7, z=0.5)
-            )
-        )
-    )
-
-    # Find the closest meshgrid point to the user-input values
-    pressure_idx = np.argmin(np.abs(pressure_grid - pressure))
-    temperature_idx = np.argmin(np.abs(temperature_grid - temperature))
-    closest_density = density_values[pressure_idx, temperature_idx]
-
-    # Add a marker for the calculated density position
-    fig.add_trace(go.Scatter3d(
-        x=[pressure_grid[pressure_idx]],
-        y=[temperature_grid[temperature_idx]],
-        z=[closest_density],
-        mode="markers",
-        marker=dict(
-            size=5,
-            color="red"
-        )
-    ))
-
-    # Set the opacity of the plot
-    fig.update_traces(opacity=0.8)
-
-    # Display the plot using st.plotly_chart
-    st.plotly_chart(fig)
+    pressure_grid, temperature
