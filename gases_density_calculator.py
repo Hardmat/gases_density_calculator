@@ -41,10 +41,7 @@ def calculate_density(gas_mixture, pressure, temperature):
 
 # Streamlit app
 st.title("Gaseous Density Calculator")
-
-# Warning message
-st.warning("Disclaimer: This calculator is based on the ideal gas law and is a work in progress. Use it at your own risk.")
-
+st.markdown("This calculator is based on the ideal gas law and is a work in progress. Use it at your own discretion.")
 
 gas_mixture = {}
 selected_gases = st.multiselect("Select Gases", list(gas_molar_masses.keys()))
@@ -71,4 +68,35 @@ if density is not None:
             density_values[i, j] = calculate_density(gas_mixture, pressure_val, temperature_val)
 
     # Create a meshgrid for the pressure and temperature values
-    pressure_grid, temperature
+    pressure_grid, temperature_grid = np.meshgrid(pressure_values, temperature_values)
+
+    # Create a 3D plot of density using Plotly
+    fig = go.Figure(data=[go.Surface(z=density_values, x=pressure_grid, y=temperature_grid)])
+    fig.update_layout(
+        scene=dict(
+            xaxis_title="Pressure (PSI)",
+            yaxis_title="Temperature (°C)",
+            zaxis_title="Density (kg/m^3)",
+            camera=dict(
+                eye=dict(x=1.7, y=-1.7, z=0.5)
+            )
+        )
+    )
+
+    # Add a marker for the calculated density position
+    fig.add_trace(go.Scatter3d(
+        x=[pressure],
+        y=[temperature],
+        z=[density],
+        mode="markers",
+        marker=dict(
+            size=5,
+            color="red"
+        )
+    ))
+
+    # Set the opacity of the plot
+    fig.update_traces(opacity=0.8)
+
+    # Display the plot using st.plotly_chart
+    st.plotly_chart(fig)
