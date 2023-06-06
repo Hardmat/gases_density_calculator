@@ -71,7 +71,7 @@ if density is not None:
     # Create a 3D plot of density
     fig = plt.figure()
     ax = fig.add_subplot(111, projection="3d")
-    ax.plot_surface(pressure_grid, temperature_grid, density_values, cmap="viridis")
+    ax.plot_surface(pressure_grid, temperature_grid, density_values, cmap="viridis", alpha=0.7)
     ax.set_xlabel("Pressure (PSI)")
     ax.set_ylabel("Temperature (°C)")
     ax.set_zlabel("Density (kg/m^3)")
@@ -81,7 +81,7 @@ if density is not None:
     ax.set_title(f"Gas Mixture Density: {gas_mixture_title}")
 
     # Add a red dot for the calculated density position
-    ax.scatter(pressure, temperature, density+10, color="red", s=50)
+    ax.scatter(pressure, temperature, density, color="red", s=50)
 
     # Adjust the z-axis scale for better visualization
     max_density = np.max(density_values)
