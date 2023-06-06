@@ -98,5 +98,11 @@ if density is not None:
     # Set the opacity of the plot
     fig.update_traces(opacity=0.8)
 
+    # Set the graph title dynamically based on the selected gases and percentages
+    gas_names = ', '.join(selected_gases)
+    gas_percentages = ', '.join(str(gas_mixture[gas]) + "%" for gas in selected_gases)
+    title = f"Density of Gas Mixture ({gas_names} - {gas_percentages})"
+    fig.update_layout(title_text=title)
+
     # Display the plot using st.plotly_chart
     st.plotly_chart(fig)
