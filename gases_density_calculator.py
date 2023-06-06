@@ -80,8 +80,8 @@ if density is not None:
     gas_mixture_title = ", ".join([f"{gas} ({percentage}%)" for gas, percentage in gas_mixture.items()])
     ax.set_title(f"Gas Mixture Density: {gas_mixture_title}")
 
-    # Add arrows pointing to the calculated density position
-    ax.quiver(pressure, temperature, density, 0, 0, 1, color="red", length=20, arrow_length_ratio=0.5)
+    # Add a red dot for the calculated density position
+    ax.scatter(pressure, temperature, density+10, color="red", s=50)
 
     # Adjust the z-axis scale for better visualization
     max_density = np.max(density_values)
