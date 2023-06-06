@@ -26,7 +26,7 @@ def calculate_density(pressure, temperature, gas_mixture):
 
     for gas, percentage in gas_mixture.items():
         molar_mass = gas_molar_masses[gas]
-        molar_volume = (percentage / 100) * (molar_mass / 1000) / ideal_gas_constant
+        molar_volume = (percentage / 100) / (molar_mass / ideal_gas_constant)
         total_molar_mass += molar_mass
         total_molar_volume += molar_volume
 
