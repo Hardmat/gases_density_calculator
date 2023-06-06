@@ -1,5 +1,6 @@
 import streamlit as st
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 
 # Constants
@@ -39,17 +40,6 @@ temperature = st.slider("Temperature (°C)", 0, 80, step=1)
 density = calculate_density(gas, pressure, temperature)
 st.write("Density of", gas, ":", density, "kg/m^3")
 
-# Generate pressure and temperature values
-pressure_values = np.linspace(0, 200, 100)
-temperature_values = np.linspace(0, 80, 100)
-
-# Calculate density for each pressure and temperature combination
-density_values = np.zeros((100, 100))
-for i, pressure_val in enumerate(pressure_values):
-    for j, temperature_val in enumerate(temperature_values):
-        density_values[i, j] = calculate_density(gas, pressure_val, temperature_val)
-
-
 # Generate pressure and temperature values for the 3D plot
 pressure_values = np.linspace(0, 200, 100)
 temperature_values = np.linspace(0, 80, 100)
@@ -58,7 +48,7 @@ temperature_values = np.linspace(0, 80, 100)
 density_values = np.zeros((100, 100))
 for i, pressure_val in enumerate(pressure_values):
     for j, temperature_val in enumerate(temperature_values):
-        density_values[i, j] = calculate_density(pressure_val, temperature_val, gas_mixture)
+        density_values[i, j] = calculate_density(gas, pressure_val, temperature_val)
 
 # Create a meshgrid for the pressure and temperature values
 pressure_grid, temperature_grid = np.meshgrid(pressure_values, temperature_values)
@@ -71,9 +61,8 @@ ax.set_xlabel("Pressure (PSI)")
 ax.set_ylabel("Temperature (°C)")
 ax.set_zlabel("Density (kg/m^3)")
 
-# Set the title of the graph based on the gas mixture
-gas_mixture_title = ", ".join([f"{gas} ({percentage}%)" for gas, percentage in gas_mixture.items()])
-ax.set_title(f"Gas Mixture Density: {gas_mixture_title}")
+# Set the title of the graph based on the selected gas
+ax.set_title(f"Density of {gas}")
 
 # Add a red dot for the calculated density position
 ax.scatter(pressure, temperature, density, color="red", s=50)
