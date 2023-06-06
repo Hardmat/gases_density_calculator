@@ -44,7 +44,7 @@ st.title("Gaseous Density Calculator")
 gas_mixture = {}
 selected_gases = st.multiselect("Select Gases", list(gas_molar_masses.keys()))
 for gas in selected_gases:
-    percentage = st.slider(f"Percentage of {gas}", 0, 100, key=gas)
+    percentage = st.number_input(f"Percentage of {gas}", min_value=0, max_value=100, key=gas)
     gas_mixture[gas] = percentage
 
 pressure = st.slider("Pressure (PSI)", 0, 200, step=1)
