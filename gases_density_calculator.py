@@ -45,7 +45,8 @@ gas_mixture = {}
 total_percentage = 0
 
 while total_percentage != 100:
-    gas = st.selectbox("Select Gas", list(gas_molar_masses.keys()), key=f"gas_{len(gas_mixture)}")
+    gas_id = str(len(gas_mixture))  # Generate a unique ID for the gas selection
+    gas = st.selectbox(f"Select Gas {gas_id}", list(gas_molar_masses.keys()))
     percentage = st.number_input("Percentage", min_value=0, max_value=100, step=1)
     total_percentage += percentage
 
